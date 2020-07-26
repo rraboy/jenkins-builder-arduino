@@ -13,7 +13,11 @@ RUN apt-get update -y \
 
 RUN  cd /usr/bin \
 	&& curl -sSL https://github.com/arduino/arduino-cli/releases/download/0.11.0/arduino-cli_0.11.0_Linux_64bit.tar.gz | tar -zxf - > /usr/bin/arduino-cli \
-	&& chmod +x arduino-cli
+	&& chmod +xr arduino-cli
+
+RUN cd /usr/bin \
+	&& wget https://github.com/mozilla/sops/releases/download/v3.6.0/sops-v3.6.0.linux -O sops \
+	&& chmod +xr sops
 
 USER jenkins
 RUN arduino-cli core update-index --additional-urls http://arduino.esp8266.com/stable/package_esp8266com_index.json \
