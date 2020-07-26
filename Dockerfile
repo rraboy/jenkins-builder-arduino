@@ -13,12 +13,15 @@ RUN apt-get update -y \
 
 RUN  cd /usr/bin \
 	&& curl -sSL https://github.com/arduino/arduino-cli/releases/download/0.11.0/arduino-cli_0.11.0_Linux_64bit.tar.gz | tar -zxf - > /usr/bin/arduino-cli \
-	&& chmod +x arduino-cli \
-	&& arduino-cli core update-index --additional-urls http://arduino.esp8266.com/stable/package_esp8266com_index.json \
+	&& chmod +x arduino-cli
+
+USER jenkins
+RUN arduino-cli core update-index --additional-urls http://arduino.esp8266.com/stable/package_esp8266com_index.json \
 	&& arduino-cli core search esp8266 --additional-urls http://arduino.esp8266.com/stable/package_esp8266com_index.json \
 	&& arduino-cli core install esp8266:esp8266 --additional-urls http://arduino.esp8266.com/stable/package_esp8266com_index.json \
 	&& arduino-cli core list
 
+USER root
 # Install avahi pieces required
 RUN mkdir -p /var/run/dbus
 COPY supervisor.conf /etc/supervisor/supervisord.conf
